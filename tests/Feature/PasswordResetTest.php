@@ -33,4 +33,57 @@ class PasswordResetTest extends TestCase
             ->assertSee('E-Mail Address')
             ->assertSee('Send Password Reset Link');
     }
+
+    /**
+     * Testing submitting the password reset request with an invalid
+     * email address.
+     */
+    public function testSubmitPasswordResetRequestInvalidEmail()
+    {
+        $this
+            ->followingRedirects()
+            ->from(route(self::ROUTE_PASSWORD_REQUEST))
+            ->post(route(self::ROUTE_PASSWORD_EMAIL), [
+                'email' => str_random(),
+            ])
+            ->assertSuccessful()
+            ->assertSee(__('validation.email', [
+                'attribute' => 'email'
+            ]));
+    }
+
+    /**
+     * Testing submitting the password reset request with an email
+     * address not in the database.
+     */
+    public function testSubmitPasswordResetRequestEmailNotFound()
+    {
+        $this
+            ->followingRedirects()
+            ->from(route(self::ROUTE_PASSWORD_REQUEST))
+            ->post(route(self::ROUTE_PASSWORD_EMAIL), [
+                'email' => $this->faker->unique()->safeEmail,
+            ])
+            ->assertSuccessful()
+            ->assertSee(e(__('passwords.user')));
+    }
+
+    /**
+     * Testing submitting a password reset request.
+     */
+    public function testSubmitPasswordResetRequest()
+    {
+        $user = factory(User::class)->create();
+
+        $this
+            ->followingRedirects()
+            ->from(route(self::ROUTE_PASSWORD_REQUEST))
+            ->post(route(self::ROUTE_PASSWORD_EMAIL), [
+                'email' => $user->email,
+            ])
+            ->assertSuccessful()
+            ->assertSee(__('passwords.sent'));
+
+        Notification::assertSentTo($user, ResetPassword::class);
+    }
 }
