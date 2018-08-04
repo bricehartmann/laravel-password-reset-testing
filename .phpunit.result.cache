@@ -1,1 +1,0 @@
-C:30:"PHPUnit\Runner\TestResultCache":284:{a:2:{s:7:"defects";a:0:{}s:5:"times";a:5:{s:13:"testBasicTest";d:1.775;s:32:"testShowPasswordResetRequestPage";d:1.216;s:42:"testSubmitPasswordResetRequestInvalidEmail";d:0.691;s:43:"testSubmitPasswordResetRequestEmailNotFound";d:0.864;s:30:"testSubmitPasswordResetRequest";d:0.957;}}}
