@@ -20,4 +20,17 @@ class PasswordResetTest extends TestCase
     const ROUTE_PASSWORD_RESET_SUBMIT = 'password.reset.submit';
 
     const USER_ORIGINAL_PASSWORD = 'secret';
+
+    /**
+     * Testing showing the password reset request page.
+     */
+    public function testShowPasswordResetRequestPage()
+    {
+        $this
+            ->get(route(self::ROUTE_PASSWORD_REQUEST))
+            ->assertSuccessful()
+            ->assertSee('Reset Password')
+            ->assertSee('E-Mail Address')
+            ->assertSee('Send Password Reset Link');
+    }
 }
